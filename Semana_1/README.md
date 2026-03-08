@@ -15,3 +15,24 @@
 | 8 | `"Cable Ethernet"`, `"25"`, `"préstamos"`, `"1er Parcial"` | El Cable Ethernet fue prestado 25 veces durante el 1er Parcial. |
 | 9 | `"I02"`, `"18"`, `"préstamos"` | El laboratorio con código I02 registró 18 préstamos. |
 | 10 | `"Control del Aire acondicionado"`, `"I02"`, `"03-03-2026"`, `"07-03-2026"`, `"NULL"` | El control del aire acondicionado del laboratorio I02 sigue sin devolverse y presenta 4 días de retraso. |
+
+### 2. Listar entidades y atributos del caso (mín. 8 entidades)
+
+| Entidad | Atributos |
+| :--- | :--- |
+| **Estudiante** | Cédula, Nombre, Apellido, Carrera, Correo Institucional, Teléfono. |
+| **Docente** | ID_Docente, Nombre, Apellido, Facultad, Correo, Especialidad. |
+| **Equipo** | Código_Activo, Nombre_Equipo, Marca, Modelo, Estado, Disponibilidad. |
+| **Categoría_Equipo** | ID_Categoría, Nombre (ej. Redes, Herramientas, Audiovisuales), Descripción. |
+| **Laboratorio** | Código_Aula (ej. I02), Nombre_Laboratorio, Ubicación (Bloque), Capacidad. |
+| **Préstamo** | ID_Préstamo, Fecha_Salida, Fecha_Prevista_Devolución, Fecha_Real_Devolución, Observaciones. |
+| **Sanción** | ID_Sanción, Motivo (Atraso/Daño), Monto_Multa, Estado_Pago. |
+| **Administrador_Lab** | ID_Admin, Nombre, Cargo, Turno. |
+
+### 3. Definir 5 reglas de negocio
+
+1. **Estado del Equipo:** Un equipo solo puede ser prestado si su estado es "Disponible" y su condición física es "Buena" o "Regular".
+2. **Plazo de Devolución:** El tiempo máximo de préstamo para herramientas manuales es de 24 horas, mientras que para equipos electrónicos es de 3 días laborables.
+3. **Restricción de Préstamo:** Un estudiante no puede solicitar un nuevo préstamo si tiene una sanción económica pendiente o un equipo con fecha de devolución vencida.
+4. **Validación de Identidad:** Para retirar cualquier equipo, el solicitante debe presentar su cédula o carnet institucional vigente.
+5. **Responsabilidad de Daños:** En caso de que un equipo sea devuelto con daños físicos, se generará automáticamente una sanción que bloquea al usuario del sistema hasta que se cubra el costo de reparación.
