@@ -20,13 +20,13 @@
 
 | Entidad | Atributos |
 | :--- | :--- |
-| **Estudiante** | Cédula, Nombre, Apellido, Carrera, Correo Institucional, Teléfono. |
+| **Estudiante** | Cédula, Nombre, Apellido, Carrera, Correo_Institucional, Teléfono. |
 | **Docente** | ID_Docente, Nombre, Apellido, Facultad, Correo, Especialidad. |
 | **Equipo** | Código_Activo, Nombre_Equipo, Marca, Modelo, Estado, Disponibilidad. |
-| **Categoría_Equipo** | ID_Categoría, Nombre (ej. Redes, Herramientas, Audiovisuales), Descripción. |
-| **Laboratorio** | Código_Aula (ej. I02), Nombre_Laboratorio, Ubicación (Bloque), Capacidad. |
+| **Categoría_Equipo** | ID_Categoría, Nombre, Descripción. |
+| **Laboratorio** | Código_Aula, Nombre_Laboratorio, Ubicación, Capacidad, Disponibilidad. |
 | **Préstamo** | ID_Préstamo, Fecha_Salida, Fecha_Prevista_Devolución, Fecha_Real_Devolución, Observaciones. |
-| **Sanción** | ID_Sanción, Motivo (Atraso/Daño), Monto_Multa, Estado_Pago. |
+| **Sanción** | ID_Sanción, Motivo, Monto_Multa, Estado_Pago. |
 | **Administrador_Lab** | ID_Admin, Nombre, Cargo, Turno. |
 
 ### 3. Definir 5 reglas de negocio
