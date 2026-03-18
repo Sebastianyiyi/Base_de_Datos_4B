@@ -65,6 +65,8 @@ Basado en el análisis del enunciado, las relaciones quedan definidas de la sigu
 
 ### 4. MER
 
+![Diagrama_MER](https://github.com/user-attachments/assets/12311158-bd4d-4ff8-bcfa-5a597d91c634)
+
 
 ### 5. Convierta a tablas 
 
