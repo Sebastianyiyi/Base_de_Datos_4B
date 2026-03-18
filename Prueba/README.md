@@ -42,6 +42,16 @@ herramienta utilizada) considere la siguiente figura para la presentación.
 ### 1. Lea el caso 
 ### 2. Identifique entidades
 
+**Entidades**
+
+* COOPERATIVA
+* SOCIO
+* UNIDAD
+* PROVINCIA
+* CANTON
+* VIAJE
+* CONTROL
+* INCUMPLIMIENTO
 
 ### 3. Defina cardinalidades
 Basado en el análisis del enunciado, las relaciones quedan definidas de la siguiente manera:
@@ -54,8 +64,15 @@ Basado en el análisis del enunciado, las relaciones quedan definidas de la sigu
 * **PROVINCIA (1:N) CANTON**: Una provincia agrupa muchos cantones, pero un cantón es exclusivo de una provincia.
 
 
-4. Convierta a tablas 
-5. Revise integridad 
+### 4. Convierta a tablas 
+
+### 5. Revise integridad
+
+| Regla de Integridad | Cómo se cumple en este caso |
+| :--- | :--- |
+| **Integridad de Entidad** | Cada cooperativa tiene un cod_coop único. Cada socio tiene una cedula única. Ninguno de estos campos puede ser NULL. |
+| **Integridad Referencial** | El campo cedula_socio en la tabla UNIDAD debe ser una FK válida que apunte a un registro en la tabla SOCIO. |
+| **Integridad de Dominio** | El campo nombre en ambas tablas solo debe aceptar caracteres alfabéticos tipo string. |
 
 
 
