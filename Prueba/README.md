@@ -63,10 +63,15 @@ Basado en el análisis del enunciado, las relaciones quedan definidas de la sigu
 * **CONTROL (1:N) INCUMPLIMIENTO**: Un control puede registrar múltiples incumplimientos.
 * **PROVINCIA (1:N) CANTON**: Una provincia agrupa muchos cantones, pero un cantón es exclusivo de una provincia.
 
+### 4. MER
 
-### 4. Convierta a tablas 
 
-### 5. Revise integridad
+### 5. Convierta a tablas 
+
+![WhatsApp Image 2026-03-17 at 8 02 46 PM](https://github.com/user-attachments/assets/39c39431-7647-43c1-8cfc-0a2eb00ac6a9)
+
+
+### 6. Revise integridad
 
 | Regla de Integridad | Cómo se cumple en este caso |
 | :--- | :--- |
