@@ -20,6 +20,7 @@ A continuación, se listan los entregables organizados por semanas. Haz clic en 
 | :---: | :--- | :---: | :---: |
 | **1** | Introducción a BD & Caso "Préstamo de Equipos" | 🟡 En proceso  | [Ver Actividad](./Semana_1/) |
 | **2** | (Tema por definir) | 🟡 En proceso | [Ver Actividad](./Semana_2/) |
+| **3** | Prueba | 🟡 En proceso | [Ver Actividad](./Prueba/) |
 
 ---
 
