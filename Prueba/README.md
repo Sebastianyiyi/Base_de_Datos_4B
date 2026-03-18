@@ -40,10 +40,20 @@ herramienta utilizada) considere la siguiente figura para la presentación.
 ---
 
 ### 1. Lea el caso 
-### 2. Identifique entidades 
+### 2. Identifique entidades
 
 
-3. Defina cardinalidades 
+### 3. Defina cardinalidades
+Basado en el análisis del enunciado, las relaciones quedan definidas de la siguiente manera:
+
+* **COOPERATIVA (1:N) SOCIO**: Una cooperativa tiene muchos socios, pero un socio pertenece a una sola cooperativa.
+* **SOCIO (1:N) UNIDAD**: Un socio posee muchas unidades, pero cada unidad pertenece a un único socio.
+* **UNIDAD (N:M) CANTON**: Muchos buses viajan a muchos cantones. *Nota: Esto genera una tabla intermedia de "VIAJE".*
+* **UNIDAD (1:N) CONTROL**: Una unidad pasa por varios controles anuales, pero cada registro de control pertenece a una sola unidad.
+* **CONTROL (1:N) INCUMPLIMIENTO**: Un control puede registrar múltiples incumplimientos.
+* **PROVINCIA (1:N) CANTON**: Una provincia agrupa muchos cantones, pero un cantón es exclusivo de una provincia.
+
+
 4. Convierta a tablas 
 5. Revise integridad 
 
