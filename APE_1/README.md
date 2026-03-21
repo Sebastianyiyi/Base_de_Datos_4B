@@ -95,6 +95,14 @@ Los estudiantes deben realizar un documento PDF que contenga:
 ---
 
 ### 2.7 Resultados obtenidos
+Diagramas de Esquemas Conceptuales (Diagrama Entidad/Relación) para varios casos reales.  
+
+<img width="5563" height="7592" alt="Academic Resource-2026-03-20-160638" src="https://github.com/user-attachments/assets/23ebe839-ba01-442d-ad42-7568678f29e6" />
+
+Esquemas Lógicos de Tablas Relacionales (Modelo Relacional) para los casos reales. 
+
+
+<img width="5072" height="7892" alt="Academic Resource-2026-03-20-155917" src="https://github.com/user-attachments/assets/0b2f15e4-c365-44bc-bca4-1789a891807f" />
 
 ### 2.8 Habilidades blandas empleadas
 
