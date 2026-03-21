@@ -63,9 +63,33 @@ Los estudiantes deben realizar un documento PDF que contenga:
 
 #### Definición de Claves (PK y FK) y Atributos
 
-
+| Entidad | Primary Key (PK) | Foreign Key (FK) | Atributos Principales |
+| :--- | :--- | :--- | :--- |
+| **CATEGORIAS** | ID_CAT | - | NOM_CAT, DES_CAT |
+| **PROVEEDORES** | ID_PRV | - | NOM_PRV, TEL_PRV, COR_PRV |
+| **PERSONAS** | ID_PER | - | CED_PER, NOM_PER, APE_PER, ROL_PER |
+| **LABORATORIOS** | ID_LAB | ID_PER_RES | COD_LAB, NOM_LAB, BLO_LAB, PIS_LAB |
+| **EQUIPOS** | ID_EQU | ID_CAT, ID_LAB, ID_PRV | COD_EQU, MAR_EQU, MOD_EQU, EST_EQU |
+| **ACCESORIOS** | ID_ACC | ID_EQU | NOM_ACC, DES_ACC, EST_ACC|
+| **PRESTAMOS** | ID_PRE | ID_PER, ID_RES | FEC_SOL_PRE, FEC_PRE, EST_PRE |
+| **RESERVAS** | ID_RES | ID_PER | FEC_RES, HOR_RES, EST_RES |
+| **MANTENIMIENTOS** | ID_MAN | ID_EQU| TIP_MAN, FEC_INI_MAN, EST_MAN|
+| **TECNICOS** | ID_TEC | - | CED_TEC, NOM_TEC, ESP_TEC |
 
 #### Relaciones y Cardinalidad
+*  **CATEGORIAS 1:N EQUIPOS:** Una categoría clasifica muchos equipos.
+*  **PROVEEDORES 1:N EQUIPOS:** Un proveedor suministra muchos equipos.
+* **LABORATORIOS 1:N EQUIPOS:** Un laboratorio alberga muchos equipos.
+*  **PERSONAS 1:N LABORATORIOS:** Un docente administra muchos laboratorios.
+*  **PERSONAS 1:N PRESTAMOS:** Una persona realiza muchos préstamos.
+* **PRESTAMOS N:M EQUIPOS:** Relación a través de DETALLE_PRESTAMOS.
+*  **PERSONAS 1:N RESERVAS:** Una persona efectúa muchas reservas.
+*  **RESERVAS N:M EQUIPOS:** Relación a través de DETALLE_RESERVA.
+*  **RESERVAS 0..1:0..1 PRESTAMOS:** Una reserva puede originar un préstamo.
+* **EQUIPOS 1:N MANTENIMIENTOS:** Un equipo genera muchos mantenimientos.
+*  **MANTENIMIENTOS N:M TECNICOS:** Relación a través de MANTENIMIENTO_TECNICO.
+* **PRESTAMOS 1:0..1 ACTAS NOVEDAD:** Un préstamo genera cero o un acta de novedad.
+*  **EQUIPOS 1:N ACCESORIOS:** Un equipo tiene muchos accesorios.
 
 
 ---
