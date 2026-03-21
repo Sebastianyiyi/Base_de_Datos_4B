@@ -33,11 +33,11 @@
 
 ### 2.4 Instrucciones
 [cite_start]Los estudiantes deben realizar un documento PDF que contenga[cite: 37]:
-1.  [cite_start]Análisis del enunciado del contexto del caso real[cite: 38].
-2.  [cite_start]Aplicación de los pasos de la Metodología de Diseño Conceptual[cite: 39].
-3.  [cite_start]Construcción del Esquema Conceptual (Diagrama Entidad/Relación)[cite: 40].
-4.  [cite_start]Aplicación de los pasos de la Metodología de Diseño Lógico y reglas de conversión[cite: 41, 42].
-5.  [cite_start]Construcción del Esquema Lógico de Tablas Relacionales (Modelo Relacional)[cite: 43].
+1. [cite_start]Análisis del enunciado del contexto del caso real[cite: 38].
+2. [cite_start]Aplicación de los pasos de la Metodología de Diseño Conceptual[cite: 39].
+3. [cite_start]Construcción del Esquema Conceptual (Diagrama Entidad/Relación)[cite: 40].
+4. [cite_start]Aplicación de los pasos de la Metodología de Diseño Lógico y reglas de conversión[cite: 41, 42].
+5. [cite_start]Construcción del Esquema Lógico de Tablas Relacionales (Modelo Relacional)[cite: 43].
 
 ### 2.5 Listado de equipos, materiales y recursos
 * [cite_start]**Equipos:** 20 PCs[cite: 48].
@@ -48,18 +48,18 @@
 ### 2.6 Actividades por desarrollar
 
 #### Definición de Entidades
-* [cite_start]**CATEGORIAS:** Clasifica los tipos de equipos tecnológicos[cite: 70].
-* [cite_start]**PROVEEDORES:** Empresas o personas que suministraron los equipos[cite: 71].
-* [cite_start]**PERSONAS:** Estudiantes y docentes registrados para préstamos o reservas[cite: 72].
-* [cite_start]**LABORATORIOS:** Espacios físicos de almacenamiento y gestión[cite: 73].
+* [cite_start]**CATEGORIAS:** Clasifica los tipos de equipos tecnológicos del laboratorio[cite: 70].
+* [cite_start]**PROVEEDORES:** Empresas o personas que suministraron los equipos a la universidad[cite: 71].
+* [cite_start]**PERSONAS:** Estudiantes y docentes registrados que pueden solicitar equipos en préstamo o reserva[cite: 72].
+* [cite_start]**LABORATORIOS:** Espacios físicos donde se almacenan y gestionan los equipos[cite: 73].
 * [cite_start]**EQUIPOS:** Recursos tecnológicos disponibles para préstamo[cite: 74].
 * [cite_start]**ACCESORIOS:** Complementos asociados a un equipo[cite: 75].
-* [cite_start]**PRESTAMOS:** Registro de solicitudes de equipos[cite: 76].
-* [cite_start]**RESERVAS:** Registro de reservas previas al préstamo[cite: 78].
-* [cite_start]**MANTENIMIENTOS:** Órdenes generadas por daños o fallas[cite: 82].
-* [cite_start]**TECNICOS:** Personal que atiende los mantenimientos[cite: 83].
+* [cite_start]**PRESTAMOS:** Registro de solicitudes de préstamo de equipos realizadas por personas[cite: 76].
+* [cite_start]**RESERVAS:** Registro de reservas previas al préstamo realizadas por personas[cite: 78].
+* [cite_start]**MANTENIMIENTOS:** Órdenes generadas cuando un equipo presenta daños o fallas[cite: 82].
+* [cite_start]**TECNICOS:** Personal técnico que atiende los mantenimientos de los equipos[cite: 83].
 * [cite_start]**ACTAS_NOVEDAD:** Documento generado al finalizar un préstamo con daño o pérdida[cite: 85].
-* **Tablas Intermedias:** DETALLE_PRESTAMO, DETALLE_RESERVA, MANTENIMIENTO_TECNICO[cite: 77, 81, 84].
+* **Tablas Intermedias:** DETALLE_PRESTAMO, DETALLE_RESERVA y MANTENIMIENTO_TECNICO[cite: 77, 81, 84].
 
 #### Definición de Claves (PK y FK) y Atributos
 
