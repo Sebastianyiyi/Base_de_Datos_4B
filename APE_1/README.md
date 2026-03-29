@@ -104,9 +104,50 @@ Esquemas Lógicos de Tablas Relacionales (Modelo Relacional) para los casos real
 
 <img width="5072" height="7892" alt="Academic Resource-2026-03-20-155917" src="https://github.com/user-attachments/assets/0b2f15e4-c365-44bc-bca4-1789a891807f" />
 
+
+Reglas de Integridad del Modelo Relacional
+
+### Integridad de Entidad
+Cada tabla posee una clave primaria única y no nula. Entidades como `PERSONAS`, `EQUIPOS` y `LABORATORIOS` usan identificadores únicos (`ID_PER`, `ID_EQU`, `ID_LAB`) para rastrear cada registro sin ambigüedades.
+
+### Integridad Referencial
+- Un registro en `PRESTAMOS` requiere que `ID_PER` exista en `PERSONAS`.
+- Todo equipo en `EQUIPOS` debe estar vinculado a un `ID_LAB` existente.
+- No se puede generar una orden en `MANTENIMIENTOS` para un `ID_EQU` que no figure en el inventario.
+
+### Integridad de Dominio
+- `ROL_PER` solo acepta los valores `estudiante` o `docente`.
+- `EST_EQU` solo acepta: `bueno`, `dañado` o `en mantenimiento`.
+- Las fechas `FEC_PRE` y `FEC_DEV_PRE` deben tener formato `DATE`.
+
 ### 2.8 Habilidades blandas empleadas
+| Habilidad | Aplicada |
+|-----------|----------|
+| Liderazgo | ☐ |
+| Trabajo en equipo | ☑ |
+| Comunicación asertiva | ☐ |
+| Empatía | ☐ |
+| Pensamiento crítico | ☐ |
+| Flexibilidad | ☐ |
+| Resolución de conflictos | ☐ |
+| Adaptabilidad | ☐ |
+| Responsabilidad | ☐ |
 
 
 ### 2.9 Conclusiones
+- La correcta aplicación de la Metodología de Diseño Conceptual y Lógico permite obtener el diagrama del Esquema Conceptual e implementar el Esquema Lógico de Tablas Relacionales para casos reales.
+- La centralización de los equipos mediante códigos institucionales únicos y su relación con laboratorios específicos garantiza un control preciso del inventario, evitando pérdidas y facilitando la ubicación física inmediata de cada activo.
+- La implementación de un historial vinculado a préstamos y órdenes de trabajo permite medir el desgaste de los equipos y la responsabilidad del usuario, asegurando que el soporte técnico y las actas de novedad actúen como mecanismos eficaces para mantener la operatividad del laboratorio.
+
 
 ### 2.10 Recomendaciones
+- Se recomienda usar lenguaje claro y técnico en los enunciados.
+- Se recomienda proporcionar bibliografía adecuada para el tema.
+- Se deben realizar ejercicios prácticos que vinculen la teoría con casos reales.
+
+### 2.11 Referencias bibliográficas
+
+### 2.12 Anexos
+Link de este documento compartido
+
+https://utaedu-my.sharepoint.com/:w:/g/personal/pacaro3350_uta_edu_ec/IQBwPDGwflo1SJVWEp5Z_-oOARQOnGejHPLxCt6lWqUdfE0?e=covaQE
