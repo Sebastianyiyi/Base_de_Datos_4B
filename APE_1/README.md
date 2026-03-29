@@ -24,12 +24,18 @@
     * Diseñar una estructura de datos que permita identificar de forma única cada equipo tecnológico, vinculándolo a su categoría, proveedor y laboratorio físico asignado.
     * Establecer una relación histórica entre los usuarios, los equipos y los eventos de mantenimiento para monitorear el ciclo de vida de la tecnología.
 
+---
+
 ### 2.2 Modalidad
 Presencial.
+
+---
 
 ### 2.3 Tiempo de duración
 * **Presenciales:** 12 horas.
 * **No presenciales:** 0 horas.
+
+---
 
 ### 2.4 Instrucciones
 Los estudiantes deben realizar un documento PDF que contenga:
@@ -38,6 +44,8 @@ Los estudiantes deben realizar un documento PDF que contenga:
 3. Construcción del Esquema Conceptual (Diagrama Entidad/Relación).
 4. Aplicación de los pasos de la Metodología de Diseño Lógico y reglas de conversión.
 5. Construcción del Esquema Lógico de Tablas Relacionales (Modelo Relacional).
+
+---
 
 ### 2.5 Listado de equipos, materiales y recursos
 * **Equipos:** PCs.
@@ -91,7 +99,6 @@ Los estudiantes deben realizar un documento PDF que contenga:
 * **PRESTAMOS 1:0..1 ACTAS NOVEDAD:** Un préstamo genera cero o un acta de novedad.
 *  **EQUIPOS 1:N ACCESORIOS:** Un equipo tiene muchos accesorios.
 
-
 ---
 
 ### 2.7 Resultados obtenidos
@@ -105,7 +112,7 @@ Esquemas Lógicos de Tablas Relacionales (Modelo Relacional) para los casos real
 <img width="5072" height="7892" alt="Academic Resource-2026-03-20-155917" src="https://github.com/user-attachments/assets/0b2f15e4-c365-44bc-bca4-1789a891807f" />
 
 
-Reglas de Integridad del Modelo Relacional
+### Reglas de Integridad del Modelo Relacional
 
 ### Integridad de Entidad
 Cada tabla posee una clave primaria única y no nula. Entidades como `PERSONAS`, `EQUIPOS` y `LABORATORIOS` usan identificadores únicos (`ID_PER`, `ID_EQU`, `ID_LAB`) para rastrear cada registro sin ambigüedades.
@@ -120,6 +127,8 @@ Cada tabla posee una clave primaria única y no nula. Entidades como `PERSONAS`,
 - `EST_EQU` solo acepta: `bueno`, `dañado` o `en mantenimiento`.
 - Las fechas `FEC_PRE` y `FEC_DEV_PRE` deben tener formato `DATE`.
 
+---
+
 ### 2.8 Habilidades blandas empleadas
 | Habilidad | Aplicada |
 |-----------|----------|
@@ -133,19 +142,25 @@ Cada tabla posee una clave primaria única y no nula. Entidades como `PERSONAS`,
 | Adaptabilidad | ☐ |
 | Responsabilidad | ☐ |
 
+---
 
 ### 2.9 Conclusiones
 - La correcta aplicación de la Metodología de Diseño Conceptual y Lógico permite obtener el diagrama del Esquema Conceptual e implementar el Esquema Lógico de Tablas Relacionales para casos reales.
 - La centralización de los equipos mediante códigos institucionales únicos y su relación con laboratorios específicos garantiza un control preciso del inventario, evitando pérdidas y facilitando la ubicación física inmediata de cada activo.
 - La implementación de un historial vinculado a préstamos y órdenes de trabajo permite medir el desgaste de los equipos y la responsabilidad del usuario, asegurando que el soporte técnico y las actas de novedad actúen como mecanismos eficaces para mantener la operatividad del laboratorio.
 
+---
 
 ### 2.10 Recomendaciones
 - Se recomienda usar lenguaje claro y técnico en los enunciados.
 - Se recomienda proporcionar bibliografía adecuada para el tema.
 - Se deben realizar ejercicios prácticos que vinculen la teoría con casos reales.
 
+---
+
 ### 2.11 Referencias bibliográficas
+
+---
 
 ### 2.12 Anexos
 Link de este documento compartido
