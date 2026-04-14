@@ -22,6 +22,8 @@ A continuación, se listan los entregables organizados por semanas. Haz clic en 
 | **2** | Diagrama ER | 🟡 En proceso | [Ver Actividad](./Semana2/) |
 | **3** | APE 01 | 🟢 Terminado | [Ver Actividad](./APE_1/) |
 | **4** | Prueba | 🟢 Terminado | [Ver Actividad](./Prueba/) |
+| **4** | APE 03 | 🟡 En proceso | [Ver Actividad](./APE_3/) |
+| **4** | Prueba Parcial | 🟡 En proceso | [Ver Actividad](./Prueba_Parcial/) |
 
 ---
 
