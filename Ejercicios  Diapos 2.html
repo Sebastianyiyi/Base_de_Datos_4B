@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz: DML en Bases de Datos</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141627;
+    --card: #1a1e35;
+    --border: #252a45;
+    --accent: #5b8dee;
+    --accent2: #a78bfa;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --text: #e8eaf2;
+    --muted: #6b7280;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--text) 30%, var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.75rem;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    background: var(--border);
+    height: 3px;
+    border-radius: 99px;
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+
+  .score-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* Cards */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 1.75rem 1.5rem;
+    margin-bottom: 1.25rem;
+    transition: border-color 0.3s ease, transform 0.2s ease;
+    animation: slideIn 0.4s cubic-bezier(.4,0,.2,1) both;
+  }
+
+  .question-card:hover {
+    border-color: #2e3555;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .q-num {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(91,141,238,0.12);
+    border: 1px solid rgba(91,141,238,0.25);
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .q-type {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--yellow);
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .q-text {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--text);
+  }
+
+  /* Fill-in blanks */
+  .blank {
+    display: inline-block;
+    background: rgba(91,141,238,0.1);
+    border: 1.5px dashed rgba(91,141,238,0.4);
+    border-radius: 4px;
+    min-width: 90px;
+    height: 1.4em;
+    vertical-align: middle;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    padding: 0 0.4rem;
+    color: var(--accent2);
+    font-weight: 700;
+    transition: all 0.3s ease;
+  }
+
+  .blank.revealed {
+    background: rgba(52,211,153,0.12);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* Reveal button */
+  .reveal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.25rem;
+  }
+
+  .reveal-btn:hover {
+    background: rgba(91,141,238,0.12);
+    transform: translateY(-1px);
+  }
+
+  .reveal-btn:active { transform: translateY(0); }
+
+  .reveal-btn.done {
+    border-color: var(--green);
+    color: var(--green);
+    pointer-events: none;
+  }
+
+  .reveal-btn svg {
+    width: 14px; height: 14px;
+    transition: transform 0.3s ease;
+  }
+
+  .reveal-btn.done svg { transform: rotate(360deg); }
+
+  /* Answer panel */
+  .answer-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.45s cubic-bezier(.4,0,.2,1), opacity 0.35s ease;
+    opacity: 0;
+  }
+
+  .answer-panel.open {
+    max-height: 300px;
+    opacity: 1;
+  }
+
+  .answer-inner {
+    margin-top: 1.1rem;
+    padding: 1rem 1.1rem;
+    background: rgba(52,211,153,0.06);
+    border-left: 3px solid var(--green);
+    border-radius: 0 8px 8px 0;
+  }
+
+  .answer-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--green);
+    margin-bottom: 0.4rem;
+  }
+
+  .answer-main {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .answer-exp {
+    font-size: 0.83rem;
+    color: #9ca3b8;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.8em;
+    background: rgba(91,141,238,0.15);
+    color: var(--accent2);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  /* Counter */
+  .counter {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: var(--mono);
+  }
+
+  .counter-num {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .counter-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.25rem;
+  }
+
+  .reset-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.55rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="badge">Bases de Datos · DML</div>
+    <h1>Quiz de Repaso</h1>
+    <p class="subtitle">10 ejercicios para consolidar lo aprendido. ¡Piensa antes de revelar!</p>
+  </header>
+
+  <div class="score-row">
+    <span id="score-label">0 / 10 reveladas</span>
+    <span id="pct-label">0%</span>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <!-- ============ PREGUNTAS ============ -->
+  <div id="quiz"></div>
+
+  <div class="counter">
+    <div class="counter-num" id="cnt">0</div>
+    <div class="counter-label">Respuestas Reveladas</div>
+    <button class="reset-btn" onclick="resetQuiz()">↺ Reiniciar Quiz</button>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    type: "Completa",
+    text: `Las propiedades <span class="blank" data-ans="ACID">___</span> garantizan que las transacciones DML sean robustas: Atomicidad, Consistencia, Aislamiento y Durabilidad.`,
+    answer: "ACID",
+    explanation: "ACID es el acrónimo que resume los cuatro pilares de fiabilidad en transacciones de bases de datos. Sin estas propiedades, los datos pueden quedar en estados inconsistentes ante fallos o accesos concurrentes."
+  },
+  {
+    type: "V/F",
+    text: `La propiedad de <b>Atomicidad</b> significa que si una operación dentro de una transacción falla, <em>solo esa operación</em> se revierte y las demás se conservan.`,
+    answer: "FALSO",
+    explanation: "La Atomicidad aplica el principio de «todo o nada»: si cualquier parte de la transacción falla, <b>toda</b> la transacción se revierte al estado inicial. No se pueden guardar cambios parciales."
+  },
+  {
+    type: "Completa",
+    text: `Cuando queremos que al eliminar un registro padre se eliminen automáticamente todos sus registros hijos, usamos <code>ON DELETE <span class="blank" data-ans="CASCADE">___</span></code>.`,
+    answer: "CASCADE",
+    explanation: "ON DELETE CASCADE propaga el borrado del padre a todos sus dependientes. Es ideal para relaciones padre-hijo donde el hijo no tiene sentido sin el padre (ej. orden → líneas de orden)."
+  },
+  {
+    type: "Opción",
+    text: `¿Cuál de estas opciones de integridad referencial es considerada la <b>más segura</b> y más utilizada en la industria para proteger datos críticos?<br><br>
+      A) ON DELETE CASCADE &nbsp; B) ON DELETE SET NULL &nbsp; C) ON DELETE RESTRICT`,
+    answer: "C) ON DELETE RESTRICT",
+    explanation: "RESTRICT es la más segura porque impide eliminar un registro padre si existen dependientes. Obliga al desarrollador a revisar y resolver las dependencias antes de poder eliminar, evitando pérdidas accidentales de datos críticos."
+  },
+  {
+    type: "Completa",
+    text: `Si ejecutas <code>DELETE FROM empleados</code> sin agregar la cláusula <span class="blank" data-ans="WHERE">___</span>, se eliminarán <b>todos</b> los registros de la tabla.`,
+    answer: "WHERE",
+    explanation: "Olvidar el WHERE en UPDATE o DELETE es uno de los errores más comunes y peligrosos. Siempre es obligatorio especificar la condición para afectar solo los registros deseados."
+  },
+  {
+    type: "V/F",
+    text: `Una vez que se ejecuta un <code>COMMIT</code>, los cambios de la transacción son <b>permanentes</b> aunque el servidor falle inmediatamente después.`,
+    answer: "VERDADERO",
+    explanation: "Esto se garantiza por la propiedad de Durabilidad (la D de ACID). El COMMIT persiste los cambios en almacenamiento permanente, por lo que sobreviven a fallos del sistema, reinicios o cortes de energía."
+  },
+  {
+    type: "Completa",
+    text: `La opción <code>ON DELETE <span class="blank" data-ans="SET NULL">___</span></code> mantiene el registro hijo pero deja vacía la referencia al padre cuando este se elimina.`,
+    answer: "SET NULL",
+    explanation: "ON DELETE SET NULL es útil en relaciones opcionales, como un artículo que puede existir aunque se elimine su autor. El registro hijo sobrevive pero su FK queda en NULL, lo que la aplicación debe gestionar correctamente."
+  },
+  {
+    type: "Opción",
+    text: `Para insertar <b>grandes volúmenes de datos</b> de forma eficiente copiando desde otra tabla, ¿qué técnica es la más apropiada?<br><br>
+      A) INSERT fila por fila &nbsp; B) INSERT INTO ... SELECT &nbsp; C) UPDATE masivo`,
+    answer: "B) INSERT INTO ... SELECT",
+    explanation: "INSERT INTO ... SELECT es la mejor práctica para inserciones masivas porque copia datos en un solo viaje al servidor. Evita el overhead de múltiples sentencias individuales y es mucho más eficiente en tiempo y memoria."
+  },
+  {
+    type: "V/F",
+    text: `Agrupar operaciones DML en <b>transacciones</b> es una práctica opcional que solo se recomienda cuando hay varios usuarios trabajando simultáneamente.`,
+    answer: "FALSO",
+    explanation: "El uso de transacciones es siempre una buena práctica, no solo en concurrencia. Garantizan atomicidad: si algo falla a mitad del proceso, se puede hacer ROLLBACK y evitar estados corruptos o datos a medias."
+  },
+  {
+    type: "Completa",
+    text: `Usar <span class="blank" data-ans="índices">___</span> en columnas frecuentemente consultadas mejora significativamente el rendimiento de las consultas <code>SELECT</code>, evitando escaneos completos de la tabla.`,
+    answer: "Índices",
+    explanation: "Los índices permiten al motor de base de datos localizar filas sin leer toda la tabla (full table scan). Sin ellos, cada consulta tiene que revisar todos los registros, lo cual es muy lento en tablas grandes."
+  }
+];
+
+let revealed = 0;
+
+function buildQuiz() {
+  const container = document.getElementById('quiz');
+  container.innerHTML = '';
+  revealed = 0;
+  updateProgress();
+
+  questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.style.animationDelay = `${i * 0.06}s`;
+
+    card.innerHTML = `
+      <div class="q-header">
+        <span class="q-num">#${String(i+1).padStart(2,'0')}</span>
+        <span class="q-type">${q.type}</span>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this, ${i})">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        </svg>
+        Revelar respuesta
+      </button>
+      <div class="answer-panel" id="ans-${i}">
+        <div class="answer-inner">
+          <div class="answer-label">✓ Respuesta</div>
+          <div class="answer-main">${q.answer}</div>
+          <div class="answer-exp">${q.explanation}</div>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function reveal(btn, idx) {
+  const panel = document.getElementById(`ans-${idx}`);
+  if (panel.classList.contains('open')) return;
+
+  // Fill blanks
+  const card = btn.closest('.question-card');
+  const blanks = card.querySelectorAll('.blank');
+  blanks.forEach(b => {
+    b.textContent = b.dataset.ans;
+    b.classList.add('revealed');
+  });
+
+  panel.classList.add('open');
+  btn.classList.add('done');
+  btn.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    Revelada
+  `;
+
+  revealed++;
+  updateProgress();
+  document.getElementById('cnt').textContent = revealed;
+}
+
+function updateProgress() {
+  const pct = Math.round((revealed / questions.length) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('score-label').textContent = `${revealed} / ${questions.length} reveladas`;
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('cnt').textContent = revealed;
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
