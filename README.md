@@ -19,12 +19,12 @@ A continuación, se listan los entregables organizados por semanas. Haz clic en 
 | Semana | Tema / Actividad | Estado | Enlace |
 | :---: | :--- | :---: | :---: |
 | **1** | Introducción a BD & Caso "Préstamo de Equipos" | 🟢 Terminado  | [Ver Actividad](./Semana_1/) |
-| **2** | Diagrama ER | 🟡 En proceso | [Ver Actividad](./Semana2/) |
+| **2** | Diagrama ER | 🟢 Terminado | [Ver Actividad](./Semana2/) |
 | **3** | APE 01 | 🟢 Terminado | [Ver Actividad](./APE_1/) |
 | **4** | Prueba | 🟢 Terminado | [Ver Actividad](./Prueba/) |
-| **4** | APE 03 | 🟡 En proceso | [Ver Actividad](./APE_3/) |
-| **4** | Prueba Parcial | 🟡 En proceso | [Ver Actividad](./Prueba_Parcial/) |
-
+| **4** | APE 03 | 🟢 Terminado | [Ver Actividad](./APE_3/) |
+| **4** | Prueba Parcial | 🟢 Terminado | [Ver Actividad](./Prueba_Parcial/) |
+| **5** | Presentación | 🟡 En proceso | [Ver Actividad](./Prueba_Parcial/) |
 ---
 
 ## 🛠️ Tecnologías y Metodología
