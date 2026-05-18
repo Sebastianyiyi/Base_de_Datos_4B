@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz SQL — JOIN, GROUP BY y HAVING</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --card: #141628;
+    --border: #252847;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --text: #e8eaf6;
+    --muted: #7880a8;
+    --correct: #00d4aa;
+    --wrong: #ff4f6a;
+    --correct-bg: rgba(0,212,170,0.1);
+    --wrong-bg: rgba(255,79,106,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(108,99,255,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,212,170,0.1) 0%, transparent 60%);
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  .progress-bar-wrap {
+    max-width: 700px;
+    margin: 0 auto 48px;
+    background: var(--border);
+    border-radius: 99px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .score-wrap {
+    max-width: 700px;
+    margin: -30px auto 30px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .quiz-container {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px;
+    transition: border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .question-card.answered::before { opacity: 1; }
+
+  .q-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .q-text {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.55;
+    margin-bottom: 22px;
+    color: #fff;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option-btn {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 13px 18px;
+    text-align: left;
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .option-btn .opt-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 20px;
+    font-weight: 700;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    background: rgba(108,99,255,0.12);
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .option-btn.correct {
+    background: var(--correct-bg);
+    border-color: var(--correct);
+    color: var(--correct);
+  }
+
+  .option-btn.correct .opt-label { color: var(--correct); }
+
+  .option-btn.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--wrong);
+    color: var(--wrong);
+    opacity: 0.7;
+  }
+
+  .option-btn.wrong .opt-label { color: var(--wrong); }
+
+  .reveal-btn {
+    margin-top: 18px;
+    background: linear-gradient(135deg, var(--accent), #9b8ef5);
+    border: none;
+    color: #fff;
+    border-radius: 12px;
+    padding: 13px 24px;
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    letter-spacing: 0.5px;
+  }
+
+  .reveal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(108,99,255,0.35);
+  }
+
+  .answer-box {
+    margin-top: 18px;
+    background: rgba(0,212,170,0.07);
+    border: 1px solid rgba(0,212,170,0.25);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b2ffe8;
+    display: none;
+    animation: slideIn 0.35s ease;
+  }
+
+  .answer-box.show { display: block; }
+
+  .answer-box strong {
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-panel {
+    max-width: 700px;
+    margin: 40px auto 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    display: none;
+  }
+
+  .result-panel.show { display: block; animation: slideIn 0.5s ease; }
+
+  .result-score {
+    font-size: 72px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .result-panel p {
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 28px;
+  }
+
+  .retry-btn {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    border-radius: 12px;
+    padding: 13px 32px;
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .retry-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  code {
+    font-family: 'Space Mono', monospace;
+    background: rgba(108,99,255,0.15);
+    color: #b8b3ff;
+    border-radius: 5px;
+    padding: 2px 7px;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Base de Datos · SQL</div>
+  <h1>JOIN, GROUP BY & HAVING</h1>
+  <p>10 preguntas para poner a prueba tus conocimientos</p>
+</header>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressBar"></div>
+</div>
+<div class="score-wrap">
+  <span>Progreso: <span id="progressText">0 / 10</span></span>
+  <span>Puntos: <span id="scoreText">0</span></span>
+</div>
+
+<div class="quiz-container" id="quizContainer"></div>
+
+<div class="result-panel" id="resultPanel">
+  <div class="result-score" id="finalScore"></div>
+  <p id="resultMsg"></p>
+  <button class="retry-btn" onclick="initQuiz()">🔄 Intentar de nuevo</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "¿Qué hace un <code>INNER JOIN</code> en SQL?",
+    options: [
+      "Devuelve todas las filas de la tabla izquierda, aunque no haya coincidencia.",
+      "Devuelve solo las filas que tienen coincidencia en AMBAS tablas.",
+      "Devuelve todas las filas de ambas tablas sin importar si coinciden.",
+      "Combina tablas multiplicando cada fila entre sí."
+    ],
+    correct: 1,
+    explanation: "<strong>INNER JOIN</strong> retorna únicamente las filas donde existe coincidencia en las dos tablas según la condición indicada en el <code>ON</code>. Si una fila no tiene pareja en la otra tabla, se descarta."
+  },
+  {
+    q: "En el ejemplo de las diapositivas, ¿por qué <strong>María</strong> no aparece en el resultado del INNER JOIN?",
+    options: [
+      "Porque María no tiene ningún valor en su columna.",
+      "Porque su <code>dep_id</code> no coincide con ningún <code>id</code> en la tabla departamentos.",
+      "Porque INNER JOIN solo muestra el primer registro.",
+      "Porque María pertenece al departamento de Finanzas."
+    ],
+    correct: 1,
+    explanation: "María no tiene un <code>dep_id</code> que coincida con ningún registro en la tabla <em>departamentos</em>, por lo tanto INNER JOIN la excluye del resultado."
+  },
+  {
+    q: "¿Qué tipo de JOIN muestra <strong>todas las filas de la tabla izquierda</strong>, incluso si no tienen coincidencia en la tabla derecha?",
+    options: [
+      "INNER JOIN",
+      "RIGHT JOIN",
+      "LEFT JOIN",
+      "FULL JOIN"
+    ],
+    correct: 2,
+    explanation: "<strong>LEFT JOIN</strong> conserva todas las filas de la tabla de la izquierda. Si no hay coincidencia en la tabla derecha, las columnas de ésta aparecen como <code>NULL</code>."
+  },
+  {
+    q: "¿Para qué se usa <code>COALESCE</code> en el ejemplo del LEFT JOIN de las diapositivas?",
+    options: [
+      "Para ordenar los resultados alfabéticamente.",
+      "Para reemplazar un valor NULL por el texto 'Sin asignar'.",
+      "Para contar las filas que no tienen departamento.",
+      "Para hacer JOIN entre más de dos tablas."
+    ],
+    correct: 1,
+    explanation: "<code>COALESCE(d.departamento, 'Sin asignar')</code> devuelve el nombre del departamento si existe, o la cadena <em>'Sin asignar'</em> cuando el valor es <code>NULL</code>, evitando mostrar nulos al usuario."
+  },
+  {
+    q: "¿Qué hace la cláusula <code>GROUP BY</code>?",
+    options: [
+      "Filtra filas individuales antes de agrupar.",
+      "Ordena el resultado de mayor a menor.",
+      "Agrupa filas con el mismo valor en una columna para aplicar funciones de agregación.",
+      "Une dos tablas por una columna común."
+    ],
+    correct: 2,
+    explanation: "<strong>GROUP BY</strong> agrupa filas que comparten el mismo valor en la(s) columna(s) indicada(s), permitiendo aplicar funciones como <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MAX</code> y <code>MIN</code> sobre cada grupo."
+  },
+  {
+    q: "En la consulta de ventas por vendedor del ejemplo, ¿qué calcula <code>SUM(monto)</code>?",
+    options: [
+      "El número total de vendedores.",
+      "La cantidad de pedidos por vendedor.",
+      "La suma total de ventas de cada vendedor.",
+      "El promedio del monto de todos los pedidos."
+    ],
+    correct: 2,
+    explanation: "<code>SUM(monto)</code> suma todos los valores de la columna <em>monto</em> dentro de cada grupo definido por <code>GROUP BY vendedor</code>, dando el total de ventas por vendedor."
+  },
+  {
+    q: "¿Cuál es la diferencia principal entre <code>WHERE</code> y <code>HAVING</code>?",
+    options: [
+      "WHERE filtra grupos; HAVING filtra filas individuales.",
+      "WHERE filtra filas antes del GROUP BY; HAVING filtra grupos después del GROUP BY.",
+      "WHERE solo funciona con texto; HAVING solo funciona con números.",
+      "Son equivalentes, pero HAVING es más moderno."
+    ],
+    correct: 1,
+    explanation: "<strong>WHERE</strong> se aplica <em>antes</em> de agrupar y no puede usar funciones de agregación. <strong>HAVING</strong> se aplica <em>después</em> del <code>GROUP BY</code> y sí permite usar funciones como <code>COUNT</code>, <code>SUM</code>, etc."
+  },
+  {
+    q: "¿Cuál es el orden correcto de ejecución en SQL según las diapositivas?",
+    options: [
+      "SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY",
+      "FROM → GROUP BY → WHERE → HAVING → SELECT → ORDER BY",
+      "FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY",
+      "WHERE → FROM → GROUP BY → SELECT → HAVING → ORDER BY"
+    ],
+    correct: 2,
+    explanation: "El orden lógico de ejecución es: <strong>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</strong>. Es importante entenderlo para saber en qué paso se puede usar cada cláusula."
+  },
+  {
+    q: "En el ejemplo del HAVING de las diapositivas, ¿qué vendedores aparecerán en el resultado?",
+    options: [
+      "Todos los vendedores con al menos 1 pedido.",
+      "Solo los vendedores con más de 3 pedidos Y ventas superiores a 5000.",
+      "Los vendedores con ventas menores a 5000.",
+      "Los vendedores cuyo nombre empiece por una letra específica."
+    ],
+    correct: 1,
+    explanation: "La condición <code>HAVING COUNT(*) > 3 AND SUM(monto) > 5000</code> filtra grupos de vendedores que <em>a la vez</em> tengan más de 3 pedidos y una suma de ventas superior a 5000."
+  },
+  {
+    q: "¿Cuál de estas funciones de agregación devuelve el valor más alto dentro de un grupo?",
+    options: [
+      "COUNT(*)",
+      "SUM(col)",
+      "AVG(col)",
+      "MAX(col)"
+    ],
+    correct: 3,
+    explanation: "<code>MAX(col)</code> devuelve el valor máximo de la columna indicada dentro del grupo. Su opuesto es <code>MIN(col)</code> para el valor mínimo."
+  }
+];
+
+let answered = 0;
+let score = 0;
+
+function initQuiz() {
+  answered = 0;
+  score = 0;
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('progressText').textContent = '0 / 10';
+  document.getElementById('scoreText').textContent = '0';
+  document.getElementById('resultPanel').classList.remove('show');
+
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+
+  questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = 'card-' + i;
+
+    const optLabels = ['A', 'B', 'C', 'D'];
+    const optionsHTML = q.options.map((opt, j) => `
+      <button class="option-btn" onclick="selectAnswer(${i}, ${j})" id="opt-${i}-${j}">
+        <span class="opt-label">${optLabels[j]}</span>
+        <span>${opt}</span>
+      </button>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="q-number">Pregunta ${i + 1} de 10</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optionsHTML}</div>
+      <button class="reveal-btn" id="reveal-${i}" onclick="revealAnswer(${i})">
+        ✨ Ver respuesta
+      </button>
+      <div class="answer-box" id="answer-${i}">
+        ${q.explanation}
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function selectAnswer(qIndex, optIndex) {
+  const q = questions[qIndex];
+  const card = document.getElementById('card-' + qIndex);
+
+  // Disable all options
+  for (let j = 0; j < q.options.length; j++) {
+    const btn = document.getElementById(`opt-${qIndex}-${j}`);
+    btn.disabled = true;
+    if (j === q.correct) btn.classList.add('correct');
+    else if (j === optIndex && optIndex !== q.correct) btn.classList.add('wrong');
+  }
+
+  card.classList.add('answered');
+
+  if (optIndex === q.correct) {
+    score++;
+    document.getElementById('scoreText').textContent = score;
+  }
+
+  answered++;
+  const pct = (answered / questions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${answered} / 10`;
+
+  // Auto-reveal explanation
+  revealAnswer(qIndex);
+
+  if (answered === questions.length) {
+    setTimeout(showResult, 800);
+  }
+}
+
+function revealAnswer(qIndex) {
+  const box = document.getElementById('answer-' + qIndex);
+  const btn = document.getElementById('reveal-' + qIndex);
+  box.classList.add('show');
+  btn.style.display = 'none';
+}
+
+function showResult() {
+  const panel = document.getElementById('resultPanel');
+  document.getElementById('finalScore').textContent = score + '/10';
+  let msg = '';
+  if (score === 10) msg = '🏆 ¡Perfecto! Dominas SQL a la perfección.';
+  else if (score >= 8) msg = '🎉 ¡Excelente! Muy buen manejo de los conceptos.';
+  else if (score >= 6) msg = '👍 ¡Bien! Repasa los puntos donde fallaste.';
+  else if (score >= 4) msg = '📖 Sigue practicando, vas por buen camino.';
+  else msg = '💪 No te rindas, revisa las diapositivas e inténtalo de nuevo.';
+  document.getElementById('resultMsg').textContent = msg;
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth' });
+}
+
+initQuiz();
+</script>
+</body>
+</html>
